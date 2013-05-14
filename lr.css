@@ -1,0 +1,22 @@
+body, td, select, input {
+	font-family: Helvetica, Arial;
+	font-size: 8pt;
+}
+
+th {
+	font-size: 8pt;
+	text-align: left;
+}
+
+.reserved_width {
+	width: 20ex;
+}
+
+#maps {
+	float: left;
+	margin-right: 3em;
+}
+
+#players {
+	float: left;
+}
