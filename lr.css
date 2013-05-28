@@ -1,6 +1,7 @@
 body, td, select, input {
 	font-family: Helvetica, Arial;
 	font-size: 8pt;
+	margin: 0;
 }
 
 th {
@@ -12,6 +13,14 @@ th {
 	width: 20ex;
 }
 
+.update {
+	margin: 25px;
+}
+
+.update_button {
+	font-size: 20pt;
+}
+
 #maps {
 	float: left;
 	margin-right: 3em;
@@ -19,4 +28,38 @@ th {
 
 #players {
 	float: left;
+}
+
+#actionbar {
+	position: fixed;
+	margin: 0;
+	width: 100%;
+	background-color: gray;
+	color: white;
+}
+
+#actionbar a {
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#below_actionbar {
+	padding-top: 50px;
+}
+
+#setup_area {
+	margin: 10px;
+	padding: 10px;
+	border-top-style: dashed;
+	border-bottom-style: dashed;
+}
+
+#matches {
+	margin-top: 50px;
+	margin-left: 10px;
+}
+
+#output_area {
+	margin: 10px;
 }

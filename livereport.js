@@ -64,7 +64,7 @@ function collect_players() {
 	var domLongNames = document.getElementsByName("player_long[]");
 	var players = new Array();
 	for (var i = 0; i < domShortNames.length; i++) {
-		players[i] = new Array();
+		players[i] = new Object();
 		players[i]["name"] = domShortNames[i].value;
 		players[i]["namev"] = domLongNames[i].value;
 	}
@@ -81,7 +81,7 @@ function collect_maps() {
 	var domLongNames = document.getElementsByName("map_long[]");
 	var maps = new Array();
 	for (var i = 0; i < domShortNames.length; i++) {
-		maps[i] = new Array();
+		maps[i] = new Object();
 		maps[i]["name"] = domShortNames[i].value;
 		maps[i]["namev"] = domLongNames[i].value;
 	}
@@ -209,7 +209,7 @@ function series_details(prefix) {
 	var details = new Array();
 
 	for (var i = 1; i <= SERIES_SIZE; i++) {
-		details[i] = new Array();
+		details[i] = new Object();
 
 		var iter_prefix = prefix + "_" + i.toString();
 
@@ -220,6 +220,7 @@ function series_details(prefix) {
 
 		// outcome
 		var domScore = iter_prefix + "_score";
+
 		var scoreIdx = document.getElementById(domScore).options.selectedIndex;
 		details[i]["not_needed"] = false;
 		var winner = 0;
@@ -240,9 +241,9 @@ function series_details(prefix) {
 
 		// recommended?
 		var domShow = iter_prefix + "_showpoll";
-		var show = document.getElementById(domShow).checked;
 		var domPoll = iter_prefix + "_poll";
-		details[i]["poll"] = show ? document.getElementById(domPoll).value : "";
+		details[i]["showpoll"] = document.getElementById(domShow).checked;
+		details[i]["poll"] = document.getElementById(domPoll).value;
 	}
 
 	return details;
@@ -319,7 +320,7 @@ function series_replace(players, maps, series, details, prefix, str) {
 		str = greplace(str, my_prefix + "_mapv}", mapv);
 
 		str = greplace(str, my_prefix + "_report}", details[i]["report"]);
-		str = greplace(str, my_prefix + "_poll}", details[i]["poll"]);
+		str = greplace(str, my_prefix + "_poll}", details[i]["showpoll"] ? details[i]["poll"] : "");
 
 		var noreport_beg = details[i]["noreport"] ? "[s]" : "";
 		var noreport_end = details[i]["noreport"] ? "[/s]" : "";
@@ -328,11 +329,14 @@ function series_replace(players, maps, series, details, prefix, str) {
 		str = greplace(str, my_prefix + "_noreport_end}", noreport_end);
 	}
 
-	var winner = ext_winner(decide_outcome(prefix), series);
+	var outcome = decide_outcome(prefix);
+	var winner = ext_winner(outcome, series);
 	var winner_label = (winner == null) ? "X" : players[winner]["namev"];
+	var loser = ext_loser(outcome, series);
+	var loser_label = (loser == null) ? "X" : players[loser]["namev"];
 	str = greplace(str, "{" + prefix + "_winner}", winner_label);
+	str = greplace(str, "{" + prefix + "_loser}", loser_label);
 	str = greplace(str, "{" + prefix + "_ls}", loser_score(prefix));
-
 	return str;
 }
 
@@ -386,14 +390,14 @@ function gsl_template_replace(maps, players, matches) {
  */
 function gsl_players_to_matches() {
 	// determine who is playing which matches
-	var matches = new Array();
+	var matches = new Object();
 
-	var initial_1 = new Array();
-	var initial_2 = new Array();
-	var winners = new Array();
-	var losers = new Array();
-	var final = new Array();
-	var advance = new Array();
+	var initial_1 = new Object();
+	var initial_2 = new Object();
+	var winners = new Object();
+	var losers = new Object();
+	var final = new Object();
+	var advance = new Object();
 	var outcome;
 
 	initial_1["left"] = 0;

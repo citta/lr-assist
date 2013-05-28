@@ -3,6 +3,9 @@
 		<title>Live Report Assist Tool</title>
 		<link href="lr.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="livereport.js"></script>
+		<script type="text/javascript" src="filesaver/FileSaver.js"></script>
+		<script type="text/javascript" src="lr_file.js"></script>
+		<script type="text/javascript" src="style.js"></script>
 		<script type="text/javascript">
 			window.onbeforeunload = function(){
 				 return "Contents will be lost.";
@@ -10,79 +13,90 @@
 		</script>
 	</head>
 	<body>
-		<div>
-			<h3>Output</h3>
-			<textarea id="print_output" rows="10" cols="80" readonly></textarea>
-
-			<h3>Input</h3>
-			<textarea id="template_input" rows="10" cols="80"></textarea>
+		<div id="actionbar">
+			<input type="file" id="load_everything" style="display: none;" onchange="load_everything()" />
+			<input type="image" src="icons/open.png" value="Load" onclick="document.getElementById('load_everything').click()" /> <a href="#" onclick="document.getElementById('load_everything').click()">Open</a>
+			<input type="image" src="icons/disk.png" id="save_everything" value="Save" onclick="save_everything()" style="margin-left:10px;" /> <a href="#" onclick="save_everything()">Save As...</a>
 		</div>
-		<div id="maps">
-			<h3>Setup Maps</h3>
-			<table>
-				<tr>
-					<th>Short name</th>
-					<th>Verbose name (Link)</th>
-				</tr>
-				<tr>
-					<td><input type="text" name="map_short[]" size="20" /></td>
-					<td><input type="text" name="map_long[]" size="20" /></td>
-				</tr>
-				<tr>
-					<td><input type="text" name="map_short[]" size="20" /></td>
-					<td><input type="text" name="map_long[]" size="20" /></td>
-				</tr>
-				<tr>
-					<td><input type="text" name="map_short[]" size="20" /></td>
-					<td><input type="text" name="map_long[]" size="20" /></td>
-				</tr>
-				<tr>
-					<td><input type="text" name="map_short[]" size="20" /></td>
-					<td><input type="text" name="map_long[]" size="20" /></td>
-				</tr>
-				<tr>
-					<td><input type="text" name="map_short[]" size="20" /></td>
-					<td><input type="text" name="map_long[]" size="20" /></td>
-				</tr>
-				<tr>
-					<td><input type="text" name="map_short[]" size="20" /></td>
-					<td><input type="text" name="map_long[]" size="20" /></td>
-				</tr>
-				<tr>
-					<td><input type="text" name="map_short[]" size="20" /></td>
-					<td><input type="text" name="map_long[]" size="20" /></td>
-				</tr>
-			</table>
+		<div id="below_actionbar"></div>
+		<h2 style="display: inline; margin-left: 10px;">Setup</h2> <a href="#" id="toggle_setup_link" onclick="toggle_setup()">[hide]</a>
+		<div id="setup_area">
+			<div id="template_area">
+				<h3>Input Template</h3>
+				<textarea id="template_input" rows="10" cols="80"></textarea>
+			</div>
+			<div id="maps">
+				<input type="file" id="load_mapfile" style="display: none;" onchange="load_maps()" />
+				<h3 style="display:inline">Setup Maps</h3>
+				<input type="image" src="icons/open_map.png" value="Load Maps" onclick="document.getElementById('load_mapfile').click()" />
+				<input type="image" src="icons/disk.png" id="save_mapfile" value="Save Maps" onclick="save_maps()" />
+				<table>
+					<tr>
+						<th>Short name</th>
+						<th>Verbose name (Link)</th>
+					</tr>
+					<tr>
+						<td><input type="text" name="map_short[]" size="20" /></td>
+						<td><input type="text" name="map_long[]" size="20" /></td>
+					</tr>
+					<tr>
+						<td><input type="text" name="map_short[]" size="20" /></td>
+						<td><input type="text" name="map_long[]" size="20" /></td>
+					</tr>
+					<tr>
+						<td><input type="text" name="map_short[]" size="20" /></td>
+						<td><input type="text" name="map_long[]" size="20" /></td>
+					</tr>
+					<tr>
+						<td><input type="text" name="map_short[]" size="20" /></td>
+						<td><input type="text" name="map_long[]" size="20" /></td>
+					</tr>
+					<tr>
+						<td><input type="text" name="map_short[]" size="20" /></td>
+						<td><input type="text" name="map_long[]" size="20" /></td>
+					</tr>
+					<tr>
+						<td><input type="text" name="map_short[]" size="20" /></td>
+						<td><input type="text" name="map_long[]" size="20" /></td>
+					</tr>
+					<tr>
+						<td><input type="text" name="map_short[]" size="20" /></td>
+						<td><input type="text" name="map_long[]" size="20" /></td>
+					</tr>
+				</table>
+			</div>
+			<div id="players">
+				<h3>Setup Players</h3>
+				<table>
+					<tr>
+						<th>Short name</th>
+						<th>Verbose name (TLPD'd)</th>
+					</tr>
+					<tr>
+						<td><input type="text" name="player_short[]" size="20" /></td>
+						<td><input type="text" name="player_long[]" size="20" /></td>
+					</tr>
+					<tr>
+						<td><input type="text" name="player_short[]" size="20" /></td>
+						<td><input type="text" name="player_long[]" size="20" /></td>
+					</tr>
+					<tr>
+						<td><input type="text" name="player_short[]" size="20" /></td>
+						<td><input type="text" name="player_long[]" size="20" /></td>
+					</tr>
+					<tr>
+						<td><input type="text" name="player_short[]" size="20" /></td>
+						<td><input type="text" name="player_long[]" size="20" /></td>
+					</tr>
+				</table>
+			</div>
+			<div style="clear: both;"></div>
+			<div class="update">
+				<input type="button" class="update_button" value="Update" onclick="gsl_update()" />
+			</div>
 		</div>
-		<div id="players">
-			<h3>Setup Players</h3>
-			<table>
-				<tr>
-					<th>Short name</th>
-					<th>Verbose name (TLPD'd)</th>
-				</tr>
-				<tr>
-					<td><input type="text" name="player_short[]" size="20" /></td>
-					<td><input type="text" name="player_long[]" size="20" /></td>
-				</tr>
-				<tr>
-					<td><input type="text" name="player_short[]" size="20" /></td>
-					<td><input type="text" name="player_long[]" size="20" /></td>
-				</tr>
-				<tr>
-					<td><input type="text" name="player_short[]" size="20" /></td>
-					<td><input type="text" name="player_long[]" size="20" /></td>
-				</tr>
-				<tr>
-					<td><input type="text" name="player_short[]" size="20" /></td>
-					<td><input type="text" name="player_long[]" size="20" /></td>
-				</tr>
-			</table>
-		</div>
-		<div style="clear: both;"></div>
-		<input type="submit" value="Apply" onclick="gsl_update()">
 		<div id="matches">
-			<h3>Setup Matches</h3>
+			<h2>Matches</h2>
 			<h4>Initial Match 1</h4>
 			<table>
 				<tr>
@@ -595,6 +609,14 @@
 					</td>
 				</tr>
 			</table>
+			<div class="update">
+				<input type="button" class="update_button" value="Update" onclick="gsl_update()" />
+			</div>
+		</div>
+
+		<div id="output_area">
+			<h2>Output (Ctrl-A, Ctrl-C to copy)</h2>
+			<textarea id="print_output" rows="10" cols="80" readonly></textarea>
 		</div>
 	</body>
 </html>
